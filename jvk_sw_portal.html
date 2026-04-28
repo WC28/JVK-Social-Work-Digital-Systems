@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JVK Social Work Systems Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Kanit:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0a7c6e;
+    --teal-light: #13a896;
+    --teal-glow: #1dd6c0;
+    --navy: #0b1e3d;
+    --navy-light: #102952;
+    --gold: #f0b429;
+    --gold-light: #fcd860;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --glass: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(10,124,110,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(13,168,150,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 60% 30%, rgba(240,180,41,0.08) 0%, transparent 50%),
+      linear-gradient(160deg, #07182e 0%, #0b1e3d 50%, #071a2e 100%);
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(13,168,150,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13,168,150,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-rings {
+    position: fixed;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    z-index: 0;
+    opacity: 0.07;
+  }
+  .bg-rings circle {
+    fill: none;
+    stroke: var(--teal-glow);
+    stroke-width: 1;
+    animation: pulse-ring 6s ease-in-out infinite;
+  }
+  .bg-rings circle:nth-child(2) { animation-delay: 1s; }
+  .bg-rings circle:nth-child(3) { animation-delay: 2s; }
+  .bg-rings circle:nth-child(4) { animation-delay: 3s; }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform-origin: center; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.03); }
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 48px 40px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .hospital-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(10,124,110,0.18);
+    border: 1px solid rgba(29,214,192,0.25);
+    border-radius: 100px;
+    padding: 6px 20px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--teal-glow);
+    text-transform: uppercase;
+    animation: fadeDown 0.6s ease both;
+  }
+  .hospital-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--teal-glow);
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    animation: fadeDown 0.7s ease 0.1s both;
+  }
+
+  .logo-icon {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-glow));
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 0 30px rgba(29,214,192,0.35), 0 4px 20px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #ffffff 0%, var(--teal-glow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    animation: fadeDown 0.7s ease 0.2s both;
+  }
+
+  .divider {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--teal-glow), transparent);
+    border-radius: 2px;
+    animation: fadeDown 0.7s ease 0.25s both;
+  }
+
+  /* ===== GRID ===== */
+  .grid-wrapper {
+    position: relative;
+    z-index: 10;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px 26px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(.22,.68,0,1.2), box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  /* staggered delay */
+  .card:nth-child(1) { animation-delay: 0.1s; }
+  .card:nth-child(2) { animation-delay: 0.18s; }
+  .card:nth-child(3) { animation-delay: 0.26s; }
+  .card:nth-child(4) { animation-delay: 0.34s; }
+  .card:nth-child(5) { animation-delay: 0.42s; }
+  .card:nth-child(6) { animation-delay: 0.50s; }
+  .card:nth-child(7) { animation-delay: 0.58s; }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(29,214,192,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card:hover {
+    transform: translateY(-6px) scale(1.015);
+    border-color: rgba(29,214,192,0.4);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.4),
+      0 0 0 1px rgba(29,214,192,0.15),
+      0 0 40px rgba(10,124,110,0.25);
+  }
+
+  /* glow accent top bar */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-accent, var(--teal-glow)), transparent);
+    opacity: 0.7;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--card-color-a, var(--teal)), var(--card-color-b, var(--teal-glow)));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3), 0 0 20px var(--card-glow, rgba(29,214,192,0.3));
+  }
+
+  .card-label {
+    font-size: 0.68rem;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--teal-glow));
+    opacity: 0.85;
+  }
+
+  .card-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #ffffff;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(29,214,192,0.12);
+    border: 1px solid rgba(29,214,192,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 500;
+    color: var(--teal-glow);
+    transition: background 0.2s ease, border-color 0.2s ease;
+    letter-spacing: 0.04em;
+  }
+  .card:hover .open-btn {
+    background: rgba(29,214,192,0.22);
+    border-color: rgba(29,214,192,0.5);
+  }
+
+  .arrow {
+    transition: transform 0.25s ease;
+  }
+  .card:hover .arrow { transform: translateX(4px); }
+
+  .tag {
+    font-size: 0.68rem;
+    font-family: 'Kanit', sans-serif;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 3px 10px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.06em;
+  }
+
+  /* Card color variants */
+  .c-teal  { --card-color-a:#0a7c6e; --card-color-b:#1dd6c0; --card-accent:#1dd6c0; --card-glow:rgba(29,214,192,0.3); }
+  .c-blue  { --card-color-a:#1a4fa0; --card-color-b:#4a90d9; --card-accent:#6ab0f5; --card-glow:rgba(74,144,217,0.3); }
+  .c-gold  { --card-color-a:#b07d10; --card-color-b:#f0b429; --card-accent:#f0b429; --card-glow:rgba(240,180,41,0.3); }
+  .c-rose  { --card-color-a:#8a1a4a; --card-color-b:#e05585; --card-accent:#f07aaa; --card-glow:rgba(224,85,133,0.3); }
+  .c-violet{ --card-color-a:#4a1a80; --card-color-b:#8a5cd0; --card-accent:#b08af5; --card-glow:rgba(138,92,208,0.3); }
+  .c-green { --card-color-a:#1a6e30; --card-color-b:#3dbf5e; --card-accent:#5cd97a; --card-glow:rgba(61,191,94,0.3); }
+  .c-orange{ --card-color-a:#8a3a10; --card-color-b:#e06830; --card-accent:#f09060; --card-glow:rgba(224,104,48,0.3); }
+
+  /* Section label */
+  .section-title {
+    position: relative;
+    z-index: 10;
+    max-width: 1000px;
+    margin: 32px auto 0;
+    padding: 0 24px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    animation: fadeDown 0.7s ease 0.3s both;
+  }
+
+  /* footer */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 0 20px 48px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes fadeDown {
+    from { opacity:0; transform: translateY(-14px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(22px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    header { padding: 36px 20px 28px; }
+    .grid-wrapper { grid-template-columns: 1fr; padding: 0 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-grid"></div>
+<svg class="bg-rings" viewBox="0 0 700 700">
+  <circle cx="350" cy="350" r="150"/>
+  <circle cx="350" cy="350" r="230"/>
+  <circle cx="350" cy="350" r="310"/>
+  <circle cx="350" cy="350" r="340"/>
+</svg>
+
+<header>
+  <div class="hospital-badge"><span class="dot"></span>โรงพยาบาลจิตเวชนครราชสีมาราชนครินทร์</div>
+  <div class="header-logo">
+    <div class="logo-icon">🏥</div>
+    <h1>JVK Social Work<br>Digital Systems</h1>
+  </div>
+  <p class="subtitle">ระบบดิจิทัลงานสังคมสงเคราะห์ · ศูนย์รวมทุกระบบในที่เดียว</p>
+  <div class="divider"></div>
+</header>
+
+<p class="section-title">— ระบบทั้งหมด · All Systems</p>
+
+<div class="grid-wrapper">
+
+  <a href="https://script.google.com/macros/s/AKfycbx52MsYY3x7817YpaSnFNXRzdEiZN9dPVlAJeJzPre4oS6XqZOhja_PIbfVkjWF-pbzjw/exec" target="_blank" class="card c-teal">
+    <div class="card-icon">✅</div>
+    <div>
+      <div class="card-label">Check-in System</div>
+      <div class="card-title">JVK Social Work<br>Check-in System</div>
+    </div>
+    <p class="card-desc">บันทึกการเข้าปฏิบัติงานของนักสังคมสงเคราะห์ ติดตามสถานะประจำวัน</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Apps Script</span>
+    </div>
+  </a>
+
+  <a href="https://script.google.com/macros/s/AKfycbwwX-cUobjZjxKeLpHqdFWkhw9NgJ8di8iLDgtMNO5M6YtdCPJiwp_oq_r26qMCfggK/exec" target="_blank" class="card c-blue">
+    <div class="card-icon">📋</div>
+    <div>
+      <div class="card-label">Case Intake</div>
+      <div class="card-title">JVK Social Work<br>Case Intake System</div>
+    </div>
+    <p class="card-desc">รับเคสและบันทึกข้อมูลผู้รับบริการเข้าสู่ระบบ ตั้งแต่ขั้นตอนแรก</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Apps Script</span>
+    </div>
+  </a>
+
+  <a href="https://script.google.com/macros/s/AKfycbwP1TIBw0Vc1v6VFYW3jCEauqaNDbE-Hc-DS06NwtrG8oPHwaH_qRv-y-bmt9JJ-Kn-sw/exec" target="_blank" class="card c-gold">
+    <div class="card-icon">📄</div>
+    <div>
+      <div class="card-label">EMR Records</div>
+      <div class="card-title">ระบบบันทึกส่งใบ EMR<br>เพื่อบันทึกหลักฐาน</div>
+    </div>
+    <p class="card-desc">บันทึกและส่งใบ EMR เพื่อเก็บหลักฐานการให้บริการในระบบเวชระเบียน</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Apps Script</span>
+    </div>
+  </a>
+
+  <a href="https://script.google.com/macros/s/AKfycbx7g5ksrtiMzBf7vjEdSVj3ZXJEZcstKGJUhf8TNi12oK1p4WSQNiIVEC4qfpTHq-3GdA/exec" target="_blank" class="card c-rose">
+    <div class="card-icon">🔀</div>
+    <div>
+      <div class="card-label">Case Referrals</div>
+      <div class="card-title">JVK SW<br>Case Referrals</div>
+    </div>
+    <p class="card-desc">ระบบส่งต่อเคสระหว่างหน่วยงาน บันทึกการส่งต่อและติดตามผล</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Apps Script</span>
+    </div>
+  </a>
+
+  <a href="https://script.google.com/macros/s/AKfycbw_jx1dIMsaCla-6YYOij39lwN_d0VqhZ12BwWz2czQGY8TPdBOljLhlmFISIod4VR8/exec" target="_blank" class="card c-violet">
+    <div class="card-icon">🏘️</div>
+    <div>
+      <div class="card-label">Community Prep</div>
+      <div class="card-title">Community Preparation<br>Information</div>
+    </div>
+    <p class="card-desc">ข้อมูลการเตรียมความพร้อมชุมชน สำหรับการส่งกลับและติดตามในพื้นที่</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Apps Script</span>
+    </div>
+  </a>
+
+  <a href="https://script.google.com/macros/s/AKfycbw_jx1dIMsaCla-6YYOij39lwN_d0VqhZ12BwWz2czQGY8TPdBOljLhlmFISIod4VR8/exec" target="_blank" class="card c-green">
+    <div class="card-icon">📝</div>
+    <div>
+      <div class="card-label">Community Data Entry</div>
+      <div class="card-title">บันทึกข้อมูล<br>การเตรียมชุมชน</div>
+    </div>
+    <p class="card-desc">กรอกและบันทึกข้อมูลการเตรียมชุมชนก่อนจำหน่าย ครบถ้วนทุกมิติ</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Apps Script</span>
+    </div>
+  </a>
+
+  <a href="https://docs.google.com/spreadsheets/d/12m8s7Bo2nZEIVhMrBuiid4InPjGneUIzRVQDwCTvAJI/edit?gid=421787507#gid=421787507" target="_blank" class="card c-orange">
+    <div class="card-icon">📊</div>
+    <div>
+      <div class="card-label">Case Management</div>
+      <div class="card-title">SW Case Management Systems<br><span style="font-size:0.88rem;font-weight:400">ระบบบันทึกเคสรายเดือน</span></div>
+    </div>
+    <p class="card-desc">Dashboard หลักสำหรับบันทึกและติดตามเคสรายเดือน ภาพรวมสถิติทั้งหมด</p>
+    <div class="card-footer">
+      <span class="open-btn">เปิดระบบ <span class="arrow">→</span></span>
+      <span class="tag">Google Sheets</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  JVK Social Work Department · โรงพยาบาลจิตเวชนครราชสีมาราชนครินทร์ · ระบบดิจิทัลงานสังคมสงเคราะห์
+</footer>
+
+</body>
+</html>
